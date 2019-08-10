@@ -58,6 +58,7 @@ func (e *exeProcessCreator) New(ctx context.Context, args ...string) (Process, e
 	cmd := exec.CommandContext(ctx, e.exePath, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd.SysProcAttr =  sysProcAttr
 	return &exeProcess{cmd}, nil
 }
 
