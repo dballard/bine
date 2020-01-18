@@ -44,10 +44,18 @@ type exeProcessCreator struct {
 	exePath string
 }
 
+type exeHideProcessCreator struct {
+	exePath string
+}
+
 // NewCreator creates a Creator for external Tor process execution based on the
 // given exe path.
 func NewCreator(exePath string) Creator {
 	return &exeProcessCreator{exePath}
+}
+
+func NewHideCreator(exePath string) Creator {
+	return &exeHideProcessCreator{exePath}
 }
 
 type exeProcess struct {
@@ -58,7 +66,14 @@ func (e *exeProcessCreator) New(ctx context.Context, args ...string) (Process, e
 	cmd := exec.CommandContext(ctx, e.exePath, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.SysProcAttr =  sysProcAttr
+	return &exeProcess{cmd}, nil
+}
+
+func (e *exeHideProcessCreator) New(ctx context.Context, args ...string) (Process, error) {
+	cmd := exec.CommandContext(ctx, e.exePath, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.SysProcAttr =  sysProcAttrHide
 	return &exeProcess{cmd}, nil
 }
 

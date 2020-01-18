@@ -4,4 +4,4 @@ package process
 
 import "syscall"
 
-var sysProcAttr = &syscall.SysProcAttr{}
+var sysProcAttrHide = &syscall.SysProcAttr{}
