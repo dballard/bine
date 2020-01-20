@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cretz/bine/control"
+	"github.com/dballard/bine/control"
 )
 
 func TestHSFetch(t *testing.T) {

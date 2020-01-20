@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cretz/bine/control"
+	"github.com/dballard/bine/control"
 
-	"github.com/cretz/bine/process"
+	"github.com/dballard/bine/process"
 )
 
 // Tor is the wrapper around the Tor process and control port connection. It

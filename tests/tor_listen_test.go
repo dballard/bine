@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cretz/bine/tor"
-	"github.com/cretz/bine/torutil"
+	"github.com/dballard/bine/tor"
+	"github.com/dballard/bine/torutil"
 )
 
 func TestListenSimpleHTTPV2(t *testing.T) {

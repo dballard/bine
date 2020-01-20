@@ -8,8 +8,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/cretz/bine/control"
-	"github.com/cretz/bine/torutil/ed25519"
+	"github.com/dballard/bine/control"
+	"github.com/dballard/bine/torutil/ed25519"
 	othered25519 "golang.org/x/crypto/ed25519"
 )
 
@@ -21,7 +21,7 @@ type OnionService struct {
 	// Key is the private key for this service. It is either the set key, the
 	// generated key, or nil if asked to discard the key. If present, it is
 	// *crypto/rsa.PrivateKey (1024 bit) when Version3 is false or
-	// github.com/cretz/bine/torutil/ed25519.KeyPair when Version3 is true.
+	// github.com/dballard/bine/torutil/ed25519.KeyPair when Version3 is true.
 	Key crypto.PrivateKey
 
 	// Version3 says whether or not this service is a V3 service.
@@ -66,9 +66,9 @@ type ListenConf struct {
 	// Key is the private key to use. If not present, a key is generated based
 	// on whether Version3 is true or false. If present, it must be a
 	// *crypto/rsa.PrivateKey (1024 bit), a
-	// github.com/cretz/bine/torutil/ed25519.KeyPair, a
+	// github.com/dballard/bine/torutil/ed25519.KeyPair, a
 	// golang.org/x/crypto/ed25519.PrivateKey, or a
-	// github.com/cretz/bine/control.Key.
+	// github.com/dballard/bine/control.Key.
 	Key crypto.PrivateKey
 
 	// Version3 determines whether, when Key is nil, a version 2 or version 3

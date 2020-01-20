@@ -14,8 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cretz/bine/tor"
-	"github.com/cretz/bine/torutil"
+	"github.com/dballard/bine/tor"
+	"github.com/dballard/bine/torutil"
 )
 
 var verbose bool
