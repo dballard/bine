@@ -66,6 +66,8 @@ func (e *exeProcessCreator) New(ctx context.Context, args ...string) (Process, e
 	cmd := exec.CommandContext(ctx, e.exePath, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	fmt.Println("regularProcessCreator")
+	printOs()
 	return &exeProcess{cmd}, nil
 }
 
@@ -74,6 +76,8 @@ func (e *exeHideProcessCreator) New(ctx context.Context, args ...string) (Proces
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.SysProcAttr =  sysProcAttrHide
+	fmt.Println("hideProcessCreator")
+	printOs()
 	return &exeProcess{cmd}, nil
 }
 
