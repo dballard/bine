@@ -65,8 +65,12 @@ type StartConf struct {
 	// set.
 	ExePath string
 
+	// CmdCreatorFunc is the override to use a specific exec.Cmd. This is
+	// ignored if ProcessCreator is set
+	CmdCreator process.CmdCreatorFunc
+
 	// ProcessCreator is the override to use a specific process creator. If set,
-	// ExePath is ignored.
+	// ExePath and CmdCreator are ignored.
 	ProcessCreator process.Creator
 
 	// UseEmbeddedControlConn can be set to true to use
@@ -229,13 +233,18 @@ func createFile(to string, from io.ReadCloser) error {
 
 func (t *Tor) startProcess(ctx context.Context, conf *StartConf) error {
 	// Get the creator
+	cmdCreator := conf.CmdCreator
+	if cmdCreator == nil {
+		cmdCreator = process.NewCmd
+	}
+
 	creator := conf.ProcessCreator
 	if creator == nil {
 		torPath := conf.ExePath
 		if torPath == "" {
 			torPath = "tor"
 		}
-		creator = process.NewCreator(torPath)
+		creator = process.NewCreator(torPath, cmdCreator)
 	}
 	// Build the args
 	args := []string{"--DataDirectory", t.DataDir}

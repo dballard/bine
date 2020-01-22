@@ -40,22 +40,24 @@ type Creator interface {
 	New(ctx context.Context, args ...string) (Process, error)
 }
 
+type CmdCreatorFunc func(ctx context.Context, exePath string, args ...string) (*exec.Cmd, error)
+
 type exeProcessCreator struct {
 	exePath string
+	cmdCreatorFunc CmdCreatorFunc
 }
 
-type exeHideProcessCreator struct {
-	exePath string
+func NewCmd(ctx context.Context, exePath string, args ...string) (*exec.Cmd, error) {
+	cmd := exec.CommandContext(ctx, exePath, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd, nil
 }
 
 // NewCreator creates a Creator for external Tor process execution based on the
 // given exe path.
-func NewCreator(exePath string) Creator {
-	return &exeProcessCreator{exePath}
-}
-
-func NewHideCreator(exePath string) Creator {
-	return &exeHideProcessCreator{exePath}
+func NewCreator(exePath string, newCmd CmdCreatorFunc) Creator {
+	return &exeProcessCreator{exePath, newCmd}
 }
 
 type exeProcess struct {
@@ -63,24 +65,19 @@ type exeProcess struct {
 }
 
 func (e *exeProcessCreator) New(ctx context.Context, args ...string) (Process, error) {
-	cmd := exec.CommandContext(ctx, e.exePath, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	fmt.Println("regularProcessCreator")
-	printOs()
-	return &exeProcess{cmd}, nil
+	cmd, err := e.cmdCreatorFunc(ctx, e.exePath, args...)
+	return &exeProcess{cmd}, err
 }
 
+/*
 func (e *exeHideProcessCreator) New(ctx context.Context, args ...string) (Process, error) {
 	cmd := exec.CommandContext(ctx, e.exePath, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.SysProcAttr =  sysProcAttrHide
-	fmt.Println("hideProcessCreator")
-	printOs()
 	return &exeProcess{cmd}, nil
 }
-
+*/
 // ErrControlConnUnsupported is returned by Process.EmbeddedControlConn when
 // it is unsupported.
 var ErrControlConnUnsupported = fmt.Errorf("Control conn not supported")
